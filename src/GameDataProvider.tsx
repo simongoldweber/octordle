@@ -7,7 +7,13 @@ import {
   SetStoreFunction,
   Store,
 } from "solid-js/store";
-import { ALLOWED, ANSWERS, GAME_ROWS, START_DATE } from "./constants";
+import {
+  ALLOWED_SET,
+  ANSWERS,
+  ANSWERS_SET,
+  GAME_ROWS,
+  START_DATE,
+} from "./constants";
 import { GameData, GameMode, GamesData, GamesDataProviderFuncs } from "./types";
 
 export const generateWordsFromSeed = (seed: number): string[] => {
@@ -58,13 +64,12 @@ function createLocalStore(): [Store<GamesData>, SetStoreFunction<GamesData>] {
     try {
       const lastSeed = Number(window.localStorage.getItem("last_" + mode));
       const guesses = window.localStorage.getItem(mode + "_guesses") || "";
-      const current = window.localStorage.getItem(mode + "_current") || "";
       if (lastSeed && (mode === "free" || lastSeed === currentDailySeed)) {
         gameData = {
           seed: lastSeed,
           guesses: guesses ? guesses.split(",") : [],
           answers: generateWordsFromSeed(lastSeed),
-          current: current,
+          current: "",
         };
       } else {
         const seed = mode === "daily" ? currentDailySeed : date.getTime();
@@ -97,7 +102,6 @@ function createLocalStore(): [Store<GamesData>, SetStoreFunction<GamesData>] {
           mode + "_guesses",
           state[mode].guesses.join(",")
         );
-        window.localStorage.setItem(mode + "_current", state[mode].current);
       });
     } catch (e) {
       // Do nothing if there is no local storage
@@ -143,8 +147,8 @@ const GamesDataProvider: Component<GamesDataProviderProps> = (props) => {
       produce((s) => {
         if (
           s[mode].current.length === 5 &&
-          (ANSWERS.indexOf(s[mode].current) >= 0 ||
-            ALLOWED.indexOf(s[mode].current) >= 0) &&
+          (ANSWERS_SET.has(s[mode].current) ||
+            ALLOWED_SET.has(s[mode].current)) &&
           !isGameComplete(mode)
         ) {
           s[mode].guesses.push(s[mode].current);

@@ -34,29 +34,27 @@ const Game: Component<GameProps> = (props) => {
         <div class="w-full flex-col">
           {[...Array(NUM_GAMES_Y).keys()].map((gameY) => (
             <div class="flex w-full">
-              {[...Array(NUM_GAMES_X).keys()].map((gameX) => {
-                return (
-                  <div
-                    class={`flex flex-col flex-auto ${
-                      gameX === 0 ? "mr-[4px]" : "ml-[4px]"
-                    } ${gameY === 0 ? "mb-[4px]" : "mt-[4px]"}`}
-                  >
-                    {[...Array(GAME_ROWS).keys()].map((rowIndex) => (
-                      <div class="flex w-full">
-                        {[...Array(GAME_COLS).keys()].map((colIndex) => (
-                          <GameSquare
-                            mode={mode}
-                            gameX={gameX}
-                            gameY={gameY}
-                            gameRow={rowIndex}
-                            gameCol={colIndex}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
+              {[...Array(NUM_GAMES_X).keys()].map((gameX) => (
+                <div
+                  class={`flex flex-col flex-auto ${
+                    gameX === 0 ? "mr-[4px]" : "ml-[4px]"
+                  } ${gameY === 0 ? "mb-[4px]" : "mt-[4px]"}`}
+                >
+                  {[...Array(GAME_ROWS).keys()].map((rowIndex) => (
+                    <div class="flex w-full">
+                      {[...Array(GAME_COLS).keys()].map((colIndex) => (
+                        <GameSquare
+                          mode={mode}
+                          gameX={gameX}
+                          gameY={gameY}
+                          gameRow={rowIndex}
+                          gameCol={colIndex}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           ))}
         </div>
