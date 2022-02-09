@@ -664,6 +664,35 @@ function makeBox(boxId) {
             <td class="box button" width="20%" id="box${boxId},9,4"></td>
             <td class="box button" width="20%" id="box${boxId},9,5"></td>
         </tr>
+
+        <tr>
+            <td class="box button" width="20%" id="box${boxId},10,1"></td>
+            <td class="box button" width="20%" id="box${boxId},10,2"></td>
+            <td class="box button" width="20%" id="box${boxId},10,3"></td>
+            <td class="box button" width="20%" id="box${boxId},10,4"></td>
+            <td class="box button" width="20%" id="box${boxId},10,5"></td>
+        </tr>
+        <tr>
+            <td class="box button" width="20%" id="box${boxId},11,1"></td>
+            <td class="box button" width="20%" id="box${boxId},11,2"></td>
+            <td class="box button" width="20%" id="box${boxId},11,3"></td>
+            <td class="box button" width="20%" id="box${boxId},11,4"></td>
+            <td class="box button" width="20%" id="box${boxId},11,5"></td>
+        </tr>
+        <tr>
+            <td class="box button" width="20%" id="box${boxId},12,1"></td>
+            <td class="box button" width="20%" id="box${boxId},12,2"></td>
+            <td class="box button" width="20%" id="box${boxId},12,3"></td>
+            <td class="box button" width="20%" id="box${boxId},12,4"></td>
+            <td class="box button" width="20%" id="box${boxId},12,5"></td>
+        </tr>
+        <tr>
+            <td class="box button" width="20%" id="box${boxId},13,1"></td>
+            <td class="box button" width="20%" id="box${boxId},13,2"></td>
+            <td class="box button" width="20%" id="box${boxId},13,3"></td>
+            <td class="box button" width="20%" id="box${boxId},13,4"></td>
+            <td class="box button" width="20%" id="box${boxId},13,5"></td>
+        </tr>
     </table>`
 
     const container = document.createElement("div");
@@ -680,7 +709,7 @@ function setupBoxes() {
 
 
 
-const TOTAL_LINES = 9;
+const TOTAL_LINES = 13;
 const TOTAL_COLUMNS = 5;
 const TOTAL_BOXES = 8;
 
@@ -1044,7 +1073,7 @@ function pk(key, keyCode) {
             }
             guesses.push(guess_current);
 
-            forEachCellForLineColumn(line, column, (box, el) => {
+            forEachCellForLineColumn(line, column - 1, (box, el) => {
                 if (answer_correct[box] < 0) {
                     identify_guess(box, line, guess_current);
                 }
@@ -1105,8 +1134,7 @@ function pk(key, keyCode) {
 
     guess_current += key;
     column++;
-    //todo huh?
-    if (column >= TOTAL_LINES) {
+    if (column >= TOTAL_COLUMNS) {
         test_real_word(line, guess_current);
     }
 }
@@ -1465,7 +1493,18 @@ function get_num_emoji(num) {
         return "8️⃣";
     } else if (num === 8) {
         return "9️⃣";
+    } else if (num === 9) {
+        return "🔟";
+    } else if (num === 10) {
+        return "🔟";
+    } else if (num === 11) {
+        return "🕚";
+    } else if (num === 12) {
+        return "🕛";
+    } else if (num === 13) {
+        return "🕐";
     }
+    
 }
 
 function get_next_color_from_emojis(emojis) {
