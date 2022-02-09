@@ -1099,6 +1099,11 @@ table {
 <canvas id="canvas" width="176" height="352" style="position:absolute;left:0;top:0;display:none;"></canvas>
 <script src="https://v6p9d9t4.ssl.hwcdn.net/html/5162977/mersenne.js"></script>
 <script>
+const TOTAL_LINES = 9;
+const TOTAL_COLUMNS = 5;
+const TOTAL_BOXES = 8;
+
+
 function el(n, t) {
     e = document.createElement(n);
     if (t) e.appendChild(t);
@@ -1161,6 +1166,10 @@ function append(out, t) {
 function acquire(out) {
     return document.getElementById(out);
 };
+
+function acquireBox(box, line, column) {
+    return acquire(`box${box + 1},${line + 1},${column + 1}`);
+}
 
 function random(n) {
     return (Math.random() * n) >> 0;
@@ -1385,19 +1394,19 @@ function pressKey(e) {
 
 function pk(key, keyCode) {
     if (!daily_mode && !free_mode) return;
-    if (line >= 9) return;
+    if (line >= TOTAL_LINES) return;
     if (keyCode == 8) {
         if (column <= 0) return;
         guess_current = guess_current.slice(0, guess_current.length - 1);
         column--;
-        if (answer_correct[0] < 0) clear(acquire("box1," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[1] < 0) clear(acquire("box2," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[2] < 0) clear(acquire("box3," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[3] < 0) clear(acquire("box4," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[4] < 0) clear(acquire("box5," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[5] < 0) clear(acquire("box6," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[6] < 0) clear(acquire("box7," + (line + 1) + "," + (column + 1)));
-        if (answer_correct[7] < 0) clear(acquire("box8," + (line + 1) + "," + (column + 1)));
+
+
+        for(let box = 0; box < TOTAL_BOXES; box++) {
+            if(answer_correct[box] < 0) {
+                clear(acquireBox(box, line, column));
+            }
+        }
+
         test_real_word(line, guess_current);
         return;
     }
@@ -1409,7 +1418,7 @@ function pk(key, keyCode) {
             column = 0;
             return;
         }
-        if (column >= 5) {
+        if (column >= TOTAL_COLUMNS) {
             if (!restoring_game && window.gtag) {
                 gtag("event", "guess", {
                     mode: daily_mode ? "daily" : "free",
@@ -1418,27 +1427,18 @@ function pk(key, keyCode) {
                 });
             }
             guesses.push(guess_current);
-            if (answer_correct[0] < 0) identify_guess(0, line, guess_current);
-            if (answer_correct[1] < 0) identify_guess(1, line, guess_current);
-            if (answer_correct[2] < 0) identify_guess(2, line, guess_current);
-            if (answer_correct[3] < 0) identify_guess(3, line, guess_current);
-            if (answer_correct[4] < 0) identify_guess(4, line, guess_current);
-            if (answer_correct[5] < 0) identify_guess(5, line, guess_current);
-            if (answer_correct[6] < 0) identify_guess(6, line, guess_current);
-            if (answer_correct[7] < 0) identify_guess(7, line, guess_current);
+            for(let box = 0; box < TOTAL_BOXES; box++) {
+                if (answer_correct[box] < 0) {
+                    identify_guess(box, line, guess_current);
+                }
+            }
 
-            if (answer[0] == guess_current) {
-                answer_correct[0] = line;
+            for(let box = 0; box < TOTAL_BOXES; box++) {
+                if (answer[box] == guess_current) {
+                    answer_correct[box] = line;
+                }
             }
-            if (answer[1] == guess_current) {
-                answer_correct[1] = line;
-            }
-            if (answer[2] == guess_current) {
-                answer_correct[2] = line;
-            }
-            if (answer[3] == guess_current) {
-                answer_correct[3] = line;
-            }
+
             line++;
             column = 0;
             guess_current = "";
@@ -1455,7 +1455,7 @@ function pk(key, keyCode) {
                         guesses: guesses
                     });
                 }
-            } else if (line >= 9) {
+            } else if (line >= TOTAL_LINES) {
                 acquire("body").style.backgroundColor = "red";
                 acquire("body").style.color = "black";
                 show_post_game(true);
@@ -1481,20 +1481,17 @@ function pk(key, keyCode) {
         return;
     }
     if ("abcdefghijklmnopqrstuvwxyz".indexOf(key) == -1) return;
-    if (column >= 5) return;
-    if (answer_correct[0] < 0) ppint(acquire("box1," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-    if (answer_correct[1] < 0) ppint(acquire("box2," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-    if (answer_correct[2] < 0) ppint(acquire("box3," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-    if (answer_correct[3] < 0) ppint(acquire("box4," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-
-    if (answer_correct[4] < 0) ppint(acquire("box5," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-    if (answer_correct[5] < 0) ppint(acquire("box6," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-    if (answer_correct[6] < 0) ppint(acquire("box7," + (line + 1) + "," + (column + 1)), key.toUpperCase());
-    if (answer_correct[7] < 0) ppint(acquire("box8," + (line + 1) + "," + (column + 1)), key.toUpperCase());
+    if (column >= TOTAL_COLUMNS) return;
+    for(let box = 0; box < TOTAL_BOXES; box++) {
+        if (answer_correct[box] < 0) {
+            ppint(acquireBox(box, line, column), key.toUpperCase());
+        }
+    }
 
     guess_current += key;
     column++;
-    if (column >= 9) {
+    //todo huh?
+    if (column >= TOTAL_LINES) {
         test_real_word(line, guess_current);
     }
 }
@@ -1521,17 +1518,11 @@ function show_post_game(show) {
 
 function test_real_word(line, guess_current) {
     var real = !(allowed.indexOf(guess_current) == -1 && answers.indexOf(guess_current) == -1)
-    if (guess_current.length < 5) real = true;
-    for (var column = 0; column < 5; column++) {
-        if (answer_correct[0] < 0) acquire("box1," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        if (answer_correct[1] < 0) acquire("box2," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        if (answer_correct[2] < 0) acquire("box3," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        if (answer_correct[3] < 0) acquire("box4," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        
-        if (answer_correct[4] < 0) acquire("box5," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        if (answer_correct[5] < 0) acquire("box6," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        if (answer_correct[6] < 0) acquire("box7," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
-        if (answer_correct[7] < 0) acquire("box8," + (line + 1) + "," + (column + 1)).style.color = real ? "white" : "red";
+    if (guess_current.length < TOTAL_COLUMNS) real = true;
+    for (var column = 0; column < TOTAL_COLUMNS; column++) {
+        for(let box = 0; box < TOTAL_BOXES; box++) {
+            if (answer_correct[box] < 0) acquireBox(box, line, column).style.color = real ? "white" : "red";    
+        }
     }
 }
 
@@ -1647,7 +1638,7 @@ function restart() {
             answers[rnd.genrand_int31() % answers.length],
             answers[rnd.genrand_int31() % answers.length],
         ];
-    } while (new Set(answer).size != 8);
+    } while (new Set(answer).size != TOTAL_BOXES);
 
     line = 0;
     column = 0;
@@ -1657,16 +1648,9 @@ function restart() {
     share = [[], [], [], [], [], [], [], []];
     guess_current = "";
 
-    for (var l = 0; l < 9; l++) {
+    for (var l = 0; l < TOTAL_LINES; l++) {
         clear_line(l);
-        share[0].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[1].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[2].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[3].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[4].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[5].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[6].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
-        share[7].push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B");
+        share.forEach(share => share.push("\u2B1B\u2B1B\u2B1B\u2B1B\u2B1B"))
     }
 
     acquire("keyboard").style.display = "";
@@ -1711,15 +1695,13 @@ function update_local_storage() {
 
 
 function clear_line(line) {
-    for (var column = 0; column < 5; column++) {
-        for(var box = 1; i <= 8; i++) {
-            clear(box);
-        }
+    for (var column = 0; column < TOTAL_COLUMNS; column++) {
+        for(var box = 0; box < TOTAL_BOXES; box++) {
+            const el = acquireBox(box, line, column);
 
-        function clear(box) {
-            clear(acquire("box" + box + "," + (line + 1) + "," + (column + 1)), "");
-            acquire("box" + box + "," + (line + 1) + "," + (column + 1)).style.color = "white";
-            acquire("box" + box + "," + (line + 1) + "," + (column + 1)).style.backgroundColor = "rgb(24, 26, 27)";
+            clear(el, "");
+            el.style.color = "white";
+            el.style.backgroundColor = "rgb(24, 26, 27)";
         }
     }
 }
@@ -1728,14 +1710,14 @@ function identify_guess(i, line, guess) {
     var ans = answer[i].split("");
     var gue = guess.split("");
     var icons = [];
-    for (column = 0; column < 5; column++) {
+    for (column = 0; column < TOTAL_COLUMNS; column++) {
         guess_letters[i][gue[column]] = 0;
-        acquire("box" + (i + 1) + "," + (line + 1) + "," + (column + 1)).style.backgroundColor = "rgb(24, 26, 27)";
+        acquireBox(i, line, column).style.backgroundColor = "rgb(24, 26, 27)";
         icons.push('\u2B1C');
     }
-    for (column = 0; column < 5; column++) {
+    for (column = 0; column < TOTAL_COLUMNS; column++) {
         if (ans[column] == gue[column]) {
-            var b = acquire("box" + (i + 1) + "," + (line + 1) + "," + (column + 1))
+            var b = acquireBox(i, line, column);
             b.style.backgroundColor = "#00cc88";
             b.style.color = "black";
             ans[column] = " ";
@@ -1744,9 +1726,9 @@ function identify_guess(i, line, guess) {
             icons[column] = ("\uD83D\uDFE9");
         }
     }
-    for (column = 0; column < 5; column++) {
+    for (column = 0; column < TOTAL_COLUMNS; column++) {
         if (ans.indexOf(gue[column]) != -1 && ans[column] != gue[column] && gue[column] != " ") {
-            var b = acquire("box" + (i + 1) + "," + (line + 1) + "," + (column + 1))
+            var b = acquireBox(i, line, column);
             b.style.backgroundColor = "#ffcc00";
             b.style.color = "black";
             if (guess_letters[i][gue[column]] != 2) guess_letters[i][gue[column]] = 1;
@@ -1909,7 +1891,7 @@ function do_share(copy, shareType) {
     printclear(acquire("answer56"), answer[4].toUpperCase() + " - " + answer[5].toUpperCase());
     printclear(acquire("answer78"), answer[6].toUpperCase() + " - " + answer[7].toUpperCase());
 
-    var shouldShowWords = line >= 9 || (answer_correct[0] >= 0 && answer_correct[1] >= 0 && answer_correct[2] >= 0 && answer_correct[3] >= 0) && answer_correct[4] >= 0 && answer_correct[5] >= 0 && answer_correct[6] >= 0 && answer_correct[7] >= 0;
+    var shouldShowWords = line >= TOTAL_LINES || (answer_correct[0] >= 0 && answer_correct[1] >= 0 && answer_correct[2] >= 0 && answer_correct[3] >= 0) && answer_correct[4] >= 0 && answer_correct[5] >= 0 && answer_correct[6] >= 0 && answer_correct[7] >= 0;
     if (daily_mode) {
         text_share = "Daily Octordle #" + seed.toString(10) + "\n" +
             get_num_emoji(answer_correct[0]) +
