@@ -535,11 +535,11 @@ table {
                         share
                     </td>
                 </tr>
-                <tr height="14.2%">
+                <!-- <tr height="14.2%">
                     <td class="box" style="border: none; border-style: double;font-size:50%;width:50%;cursor:pointer;visibility:hidden;padding:8px;" id="share_image">
                         share as image (twitter)
                     </td>
-                </tr>
+                </tr> -->
                 <tr height="14.2%">
                     <td class="box" style="border: none; border-style: double;font-size:50%;width:50%;cursor:pointer;padding:8px;" id="share_clipboard">
                         copy to clipboard
@@ -1146,7 +1146,7 @@ function show_post_game(show) {
         acquire("post_game").style.display = "";
         acquire("keyboard").style.display = "none";
         acquire("share").style.visibility = navigator.share ? "" : "hidden";
-        acquire("share_image").style.visibility = navigator.share ? "" : "hidden";
+        //acquire("share_image").style.visibility = navigator.share ? "" : "hidden";
         do_share(false, "clipboard");
     } else {
         acquire("post_game").style.display = "none";
@@ -1455,9 +1455,9 @@ acquire("share").onclick = function() {
 acquire("share_clipboard").onclick = function() {
     do_share(true, "clipboard");
 }
-acquire("share_image").onclick = function() {
-    do_share(true, "image");
-}
+// acquire("share_image").onclick = function() {
+//     do_share(true, "image");
+// }
 acquire("reset_free").onclick = function() {
     vibrate();
     if (isInWebViewiOS || confirm("Are you sure you want to start a new Free Octordle? (The current game will be deleted)")) {
