@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Octordle</title>
-<meta name="description" content="Put your skills to the test and solve four Wordles at once! You have 9 guesses to solve all four words. A new Octordle available each day to solve.">
+<meta name="description" content="Put your skills to the test and solve eight Wordles at once! You have 13 guesses to solve all eight words. A new Octordle available each day to solve.">
 <meta name="keywords" content="Octordle, Quordle, Dordle, Wordle, word game, puzzle, brain teaser">
 <meta name="author" content="Freddie Meyer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://octordle.com">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Octordle">
-<meta property="og:description" content="Put your skills to the test and solve four Wordles at once! You have 9 guesses to solve all four words. A new Octordle available each day to solve.">
+<meta property="og:description" content="Put your skills to the test and solve eight Wordles at once! You have 13 guesses to solve all eight words. A new Octordle available each day to solve.">
 <meta property="og:image" content="https://octordle.com/screenshot.png">
 <meta property="og:image:width" content="802">
 <meta property="og:image:height" content="531">
@@ -263,7 +263,7 @@ table {
                 <td class="box" style="border: none; border-style: double; width:35%;cursor:pointer;" id="leave_tutorial">back</td>
             </tr>
         </table>
-        <h3>Guess all eight OCTORDLE words in 9 tries.</h3>
+        <h3>Guess all eight OCTORDLE words in 13 tries.</h3>
         <p>Each guess must be a valid 5 letter word. Hit the enter button to submit.<br><br>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>
         <h2>Examples</h2>
         <table style="width: 50%; border-spacing:0px;font-size:200%;">
@@ -313,7 +313,7 @@ table {
                 </td>
             </tr>
         </table>
-        <p>The letters C, O, M, F, Y are not in the word in any spot.<br><br>When you type a guess in OCTORDLE, you will guess that word for all four words that you are solving. All four words you are solving will be different.<br></p>
+        <p>The letters C, O, M, F, Y are not in the word in any spot.<br><br>When you type a guess in OCTORDLE, you will guess that word for all eight words that you are solving. All eight words you are solving will be different.<br></p>
         <table style="width: 100%; border-spacing:0px;font-size:200%;">
             <tr>
                 <td style="width: 50%; padding:0px;">
@@ -444,7 +444,7 @@ table {
                 <li>The bottom right word has the O in the right spot and the D in the wrong spot.</li>
             </ol>
         </p>
-        <p>You have 9 guesses to get all 4 words correct. Good luck!</p>
+        <p>You have 13 guesses to get all 8 words correct. Good luck!</p>
         <p>A new Octordle will be available each day!<br><br></p>
     </div>
     <div id="game" style="display: none;flex-direction: column;" width="100%">
@@ -759,12 +759,7 @@ function text(t) {
 };
 
 function clear(out) {
-    if(out) {
-        out.innerHTML = "";
-    }
-    else {
-        debugger;
-    }
+    out.innerHTML = "";
 };
 
 function ppint(out, t) {
