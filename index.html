@@ -1467,39 +1467,15 @@ acquire("reset_free").onclick = function() {
     }
 }
 
+const emojiMap = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🕚", "🕛", "🕐", "🕑"]
+
 function get_num_emoji(num) {
     if (num < 0) {
         return "\uD83D\uDFE5"
-    } else if (num === 0) {
-        return "1️⃣";
-    } else if (num === 1) {
-        return "2️⃣";
-    } else if (num === 2) {
-        return "3️⃣";
-    } else if (num === 3) {
-        return "4️⃣";
-    } else if (num === 4) {
-        return "5️⃣";
-    } else if (num === 5) {
-        return "6️⃣";
-    } else if (num === 6) {
-        return "7️⃣";
-    } else if (num === 7) {
-        return "8️⃣";
-    } else if (num === 8) {
-        return "9️⃣";
-    } else if (num === 9) {
-        return "🔟";
-    } else if (num === 10) {
-        return "🔟";
-    } else if (num === 11) {
-        return "🕚";
-    } else if (num === 12) {
-        return "🕛";
-    } else if (num === 13) {
-        return "🕐";
+    } else if(num < emojiMap.length) {
+        return emojiMap[num];
     }
-    
+    return "❓";
 }
 
 function get_next_color_from_emojis(emojis) {
