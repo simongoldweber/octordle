@@ -513,7 +513,7 @@ table {
 
             </table>
         </div>
-        <div id="post_game" style="">
+        <div id="post_game">
             <table width="100%">
                 <tr height="14.2%">
                     <td rowspan=5 style="width:50%;">
@@ -1539,6 +1539,7 @@ function do_share(copy, shareType) {
     text_mobile_share = text_share
     text_share += "\n"
 
+
     var l1 = line - 1;
     if (answer_correct[0] >= 0 && answer_correct[1] >= 0 ) {
         l1 = Math.max(answer_correct[0], answer_correct[1])
@@ -1649,7 +1650,7 @@ function do_share(copy, shareType) {
             var fontHeight = metrics.actualBoundingBoxAscent;
             ctx.fillText(titleText, canvas.width / 2, y * (size + padding) + size - (size - fontHeight) / 2, canvas.width - textPadding * 2);
             y++;
-            for (var row = 0; row < 2; row++) {
+            for (var row = 0; row < 4; row++) {
                 for (var i = 0; i < 2; i++) {
                     ctx.fillStyle = answer_correct[i + row * 2] >= 0 ? "#00a6ed" : "#f8312f";
                     var dir = (i * 2 - 1)
@@ -1779,7 +1780,7 @@ function do_share(copy, shareType) {
             }
 
             canvas.toBlob(function(blob) {
-                var file = new File([blob], "quordle.png", { type: "image/png" });
+                var file = new File([blob], "octordle.png", { type: "image/png" });
                 navigator.share({
                     files: [file],
                     text: text_mobile_share
