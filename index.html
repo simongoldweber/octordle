@@ -1809,6 +1809,7 @@ function render_bg_keys() {
         var keyGuessed = false
         var keyColors = ["rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)"]
         var colorOptions = ["#919191", "#ffcc00", "#00cc88"]
+        gradStrArray = [];
         for (var g = 0; g < keyColors.length; g++) {
             for (var i = 0; i < colorOptions.length; i++) {
                 if (guess_letters[g][keys[k]] == i) {
