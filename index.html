@@ -1797,7 +1797,7 @@ function do_share(copy, shareType) {
 }
 
 function render_bg_keys() {
-    var keys = "abcdefghijklmnopqrstuvwxyz".split("")
+    var keys = "abcdefghijklmnopqrstuvwxyz".split("");
 
     var pos = " 50%"
     if (answer_correct[0] < 0 && answer_correct[1] >= 0) pos = " 90%";
@@ -1805,9 +1805,10 @@ function render_bg_keys() {
 
     for (k in keys) {
         var keyGuessed = false
-        var keyColors = ["rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)"]
+        var keyColors = ["rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)"]
         var colorOptions = ["#919191", "#ffcc00", "#00cc88"]
-        for (var g = 0; g < TOTAL_BOXES; g++) {
+        var gradStrArr = [];
+        for (var g = 0; g < keyColors.length; g++) {
             for (var i = 0; i < colorOptions.length; i++) {
                 if (guess_letters[g][keys[k]] == i) {
                     keyColors[g] = colorOptions[i]
@@ -1815,16 +1816,18 @@ function render_bg_keys() {
                 }
             }
         }
+
         for (var g = 0; g < keyColors.length; g++) {
             if (keyGuessed && keyColors[g] === "rgb(24, 26, 27)") {
                 keyColors[g] = "#5c5c5c"
             }
+            gradStrArr.push("linear-gradient(45deg, " + keyColors[g] + ", " + keyColors[g] + ")");
         }
-        var bg = "linear-gradient(45deg, " + keyColors[0] + ", " + keyColors[0] + " 100%), linear-gradient(135deg, " + keyColors[2] + ", " + keyColors[2] + "), linear-gradient(225deg, " + keyColors[1] + ", " + keyColors[1] + ") , linear-gradient(225deg, " + keyColors[3] + ", " + keyColors[3] + ")"
+        var bg = gradStrArr.join(",");
         var key = acquire(keys[k])
         key.style.backgroundImage = bg
-        key.style.backgroundSize = "50% 50%"
-        key.style.backgroundPosition = "0% 0%, 0% 100%, 100% 0%, 100% 100%"
+        key.style.backgroundSize = "51% 26%";
+        key.style.backgroundPosition = "0% 0%, 100% 0%, 0% 33%, 100% 33%, 0% 66%, 100% 66%, 0% 100%, 100% 100%"
         key.style.backgroundRepeat = "no-repeat"
         key.style.color = keyGuessed ? "black" : "white"
         // key.style.textShadow = keyGuessed ? "0 0 4px white" : ""
