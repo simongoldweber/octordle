@@ -1654,11 +1654,6 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 function do_share(copy, shareType) {
-    printclear(acquire("answer12"), answer[0].toUpperCase() + " - " + answer[1].toUpperCase());
-    printclear(acquire("answer34"), answer[2].toUpperCase() + " - " + answer[3].toUpperCase());
-    printclear(acquire("answer56"), answer[4].toUpperCase() + " - " + answer[5].toUpperCase());
-    printclear(acquire("answer78"), answer[6].toUpperCase() + " - " + answer[7].toUpperCase());
-
     let answer_correct = window.answer_correct;
     let answer = window.answer;
     let share = window.share;
@@ -1666,6 +1661,11 @@ function do_share(copy, shareType) {
     let text_mobile_share = "";
     let seed = window.seed;
     let line = window.line;
+
+    printclear(acquire("answer12"), answer[0].toUpperCase() + " - " + answer[1].toUpperCase());
+    printclear(acquire("answer34"), answer[2].toUpperCase() + " - " + answer[3].toUpperCase());
+    printclear(acquire("answer56"), answer[4].toUpperCase() + " - " + answer[5].toUpperCase());
+    printclear(acquire("answer78"), answer[6].toUpperCase() + " - " + answer[7].toUpperCase());
 
     let shouldShowWords = line >= TOTAL_LINES || (answer_correct[0] >= 0 && answer_correct[1] >= 0 && answer_correct[2] >= 0 && answer_correct[3] >= 0) && answer_correct[4] >= 0 && answer_correct[5] >= 0 && answer_correct[6] >= 0 && answer_correct[7] >= 0;
     if (daily_mode) {
