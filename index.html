@@ -2018,7 +2018,7 @@ window.onresize = function() {
         acquire("share_content").style.fontSize = (body.clientWidth / 550 * 30) + "%";
         document.documentElement.style.setProperty('--boxsize', (body.clientWidth / 11) + 'px');
         document.documentElement.style.setProperty('--spacing', body.clientWidth <= 300 ? '0px' : '2px');
-        document.documentElement.style.setProperty('--collapse', body.clientWidth <= 300 ? 'collapse' : 'collapse');
+        document.documentElement.style.setProperty('--collapse', body.clientWidth <= 300 ? 'collapse' : 'separate');
     } else {
         let fontSize = Math.min(28, body.clientWidth / 15);
         body.style.maxWidth = "98vw";
