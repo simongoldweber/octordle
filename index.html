@@ -486,6 +486,17 @@ table {
                 No
             </td>
         </table>
+        <table id="widescreen-feedback" style="width: 100%; font-size: 75%">
+            <td style="width:*">
+                Is widescreen working well?
+            </td>
+            <td class="box" id="widescreen-feedback-yes">
+                Yes
+            </td>
+            <td class="box" id="widescreen-feedback-no">
+                No
+            </td>
+        </table>
         <div id="normal-container" style="width: 100%;flex: 1;overflow: auto;">
             <table style="width: 100%; border-spacing:0px;">
                 <tr>
@@ -1257,11 +1268,12 @@ function time_to_next() {
     function format(value, name) {
         return value + name + (value > 1 ? "s" : "");
     }
-    function addDays(date, days) {
-        var d = new Date(date)
-        d.setDate(date.getDate() + days);
-        return d;
-    }
+}
+
+function addDays(date, days) {
+    var d = new Date(date)
+    d.setDate(date.getDate() + days);
+    return d;
 }
 
 function setTimeToNext() {
@@ -1479,6 +1491,7 @@ acquire("exit_fullscreen").onclick = function() {
 
 acquire("widescreen-yes").onclick = function() {
     localStorage.setItem('widescreen', "yes");
+    localStorage.setItem("widescreen-feedback", addDays(new Date(), 2));
     if (window.gtag) {
         gtag("event", "widescreen", {
             mode: "yes",
@@ -1506,8 +1519,36 @@ acquire("widescreen-no").onclick = function() {
 
 acquire("widescreen-reset").onclick = function() {
     localStorage.removeItem('widescreen');
+    localStorage.removeItem("widescreen-feedback");
     if (window.gtag) {
         gtag("event", "widescreen-reset", {
+            width: window.innerWidth
+        });
+    }
+    window.onresize();
+}
+
+acquire("widescreen-feedback-yes").onclick = function() {
+    localStorage.setItem('widescreen-feedback', "yes");
+    if (window.gtag) {
+        gtag("event", "widescreen-feedback", {
+            mode: "yes",
+            width: window.innerWidth
+        });
+        gtag("event", "widescreen-feedback-yes", {
+            width: window.innerWidth
+        });
+    }
+    window.onresize();
+}
+acquire("widescreen-feedback-no").onclick = function() {
+    localStorage.setItem('widescreen-feedback', "no");
+    if (window.gtag) {
+        gtag("event", "widescreen-feedback", {
+            mode: "no",
+            width: window.innerWidth
+        });
+        gtag("event", "widescreen-feedback-no", {
             width: window.innerWidth
         });
     }
@@ -1947,6 +1988,18 @@ function render_bg_keys() {
 
 document.addEventListener('keydown', pressKey);
 
+function tryParseDate(str) {
+    try {
+        return new Date(str);
+    } catch (e) {
+        if (window.gtag) {
+            gtag("event", "parse-date-fail", {
+                str: str
+            });
+        }
+    }
+}
+
 window.onresize = function() {
     let body = acquire("body");
 
@@ -1981,6 +2034,17 @@ window.onresize = function() {
     acquire('normal-container').style.display = showNormalScreen ? "block" : "none";
     acquire('widescreen-container').style.display = showWidescreen ? "block" : "none";
     acquire('widescreen-reset').style.display = showReset ? "block" : "none";
+    acquire('widescreen-feedback').style.display = showWidescreenFeedback(showWidescreen) ? "block" : "none";
+
+    function showWidescreenFeedback(showWidescreen) {
+        let widescreenFeedback = localStorage.getItem("widescreen-feedback");
+        let widescreenFeedbackProvided = widescreenFeedback === "yes" || widescreenFeedback === "no"
+        let widescreenDate = widescreenFeedback && !widescreenFeedbackProvided && tryParseDate(widescreenFeedback);
+        if(!!mode && !widescreenFeedbackProvided && !widescreenFeedback) {
+            localStorage.setItem("widescreen-feedback", addDays(new Date(), 1));
+        }
+        return showWidescreen && !widescreenFeedbackProvided && widescreenDate && widescreenDate < new Date();
+    }
 }
 window.onresize();
 
