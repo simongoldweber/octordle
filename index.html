@@ -1618,7 +1618,15 @@ function do_share(copy, shareType) {
     printclear(acquire("answer56"), answer[4].toUpperCase() + " - " + answer[5].toUpperCase());
     printclear(acquire("answer78"), answer[6].toUpperCase() + " - " + answer[7].toUpperCase());
 
-    var shouldShowWords = line >= TOTAL_LINES || (answer_correct[0] >= 0 && answer_correct[1] >= 0 && answer_correct[2] >= 0 && answer_correct[3] >= 0) && answer_correct[4] >= 0 && answer_correct[5] >= 0 && answer_correct[6] >= 0 && answer_correct[7] >= 0;
+    let answer_correct = window.answer_correct;
+    let answer = window.answer;
+    let share = window.share;
+    let text_share = "";
+    let text_mobile_share = "";
+    let seed = window.seed;
+    let line = window.line;
+
+    let shouldShowWords = line >= TOTAL_LINES || (answer_correct[0] >= 0 && answer_correct[1] >= 0 && answer_correct[2] >= 0 && answer_correct[3] >= 0) && answer_correct[4] >= 0 && answer_correct[5] >= 0 && answer_correct[6] >= 0 && answer_correct[7] >= 0;
     if (daily_mode) {
         text_share = "Daily Octordle #" + seed.toString(10) + "\n" +
             get_num_emoji(answer_correct[0]) +
@@ -1646,35 +1654,35 @@ function do_share(copy, shareType) {
     text_share += "\n"
 
 
-    var l1 = line - 1;
+    let l1 = line - 1;
     if (answer_correct[0] >= 0 && answer_correct[1] >= 0 ) {
         l1 = Math.max(answer_correct[0], answer_correct[1])
     }
-    var l2 = line - 1;
+    let l2 = line - 1;
     if (answer_correct[2] >= 0 && answer_correct[3] >= 0) {
         l2 = Math.max(answer_correct[2], answer_correct[3])
     }
-    var l3 = line - 1;
+    let l3 = line - 1;
     if (answer_correct[4] >= 0 && answer_correct[5] >= 0) {
         l3 = Math.max(answer_correct[4], answer_correct[5])
     }
-    var l4 = line - 1;
+    let l4 = line - 1;
     if (answer_correct[6] >= 0 && answer_correct[7] >= 0) {
         l4 = Math.max(answer_correct[6], answer_correct[7])
     }
-    for (var i = 0; i <= l1; i++) {
+    for (let i = 0; i <= l1; i++) {
         text_share += share[0][i] + " " + share[1][i] + "\n";
     }
     text_share += "\n"
-    for (var i = 0; i <= l2; i++) {
+    for (let i = 0; i <= l2; i++) {
         text_share += share[2][i] + " " + share[3][i] + "\n";
     }
     text_share += "\n"
-    for (var i = 0; i <= l3; i++) {
+    for (let i = 0; i <= l3; i++) {
         text_share += share[4][i] + " " + share[5][i] + "\n";
     }
     text_share += "\n"
-    for (var i = 0; i <= l4; i++) {
+    for (let i = 0; i <= l4; i++) {
         text_share += share[6][i] + " " + share[7][i] + "\n";
     }
 
@@ -1897,34 +1905,37 @@ function do_share(copy, shareType) {
 }
 
 function render_bg_keys() {
-    var keys = "abcdefghijklmnopqrstuvwxyz".split("");
+    let answer_correct = window.answer_correct;
+    let guess_letters = window.guess_letters;
 
-    var pos = " 50%"
+    let keys = "abcdefghijklmnopqrstuvwxyz".split("");
+
+    let pos = " 50%"
     if (answer_correct[0] < 0 && answer_correct[1] >= 0) pos = " 90%";
     if (answer_correct[1] < 0 && answer_correct[0] >= 0) pos = " 10%";
 
-    for (k in keys) {
-        var keyGuessed = false
-        var keyColors = ["rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)"]
-        var colorOptions = ["#919191", "#ffcc00", "#00cc88"]
-        var gradStrArr = [];
-        for (var g = 0; g < keyColors.length; g++) {
-            for (var i = 0; i < colorOptions.length; i++) {
-                if (guess_letters[g][keys[k]] == i) {
+    for (let k in keys) {
+        let keyGuessed = false
+        let keyColors = ["rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)", "rgb(24, 26, 27)"]
+        let colorOptions = ["#919191", "#ffcc00", "#00cc88"]
+        let gradStrArr = [];
+        for (let g = 0; g < keyColors.length; g++) {
+            for (let i = 0; i < colorOptions.length; i++) {
+                if (guess_letters[g][keys[k]] === i) {
                     keyColors[g] = colorOptions[i]
                     keyGuessed = true
                 }
             }
         }
 
-        for (var g = 0; g < keyColors.length; g++) {
+        for (let g = 0; g < keyColors.length; g++) {
             if (keyGuessed && keyColors[g] === "rgb(24, 26, 27)") {
                 keyColors[g] = "#5c5c5c"
             }
             gradStrArr.push("linear-gradient(45deg, " + keyColors[g] + ", " + keyColors[g] + ")");
         }
-        var bg = gradStrArr.join(",");
-        var key = acquire(keys[k])
+        let bg = gradStrArr.join(",");
+        let key = acquire(keys[k])
         key.style.backgroundImage = bg
         key.style.backgroundSize = "51% 26%";
         key.style.backgroundPosition = "0% 0%, 100% 0%, 0% 33%, 100% 33%, 0% 66%, 100% 66%, 0% 100%, 100% 100%"
@@ -1977,7 +1988,7 @@ setupBoxes();
 onStateChange();
 
 (function init() {
-    var giveordles = [
+    let giveordles = [
         "Shout out to Les, Jess, Brad, Tina, Lisa, Matt A! ♥",
         "Donate to your favorite non-profit",
         "Do a little cleaning at home",
@@ -2006,17 +2017,16 @@ onStateChange();
         "Smile at someone"
     ];
 
-    var diff = new Date() - new Date('02/23/2022');
-    var days = Math.floor(diff / (1000 * 60 *60 *24));
+    let diff = new Date() - new Date('02/23/2022');
+    let days = Math.floor(diff / (1000 * 60 *60 *24));
 
-    var todaysGiveordle = giveordles[days % giveordles.length];
+    let todaysGiveordle = giveordles[days % giveordles.length];
 
+    let giveordle = acquire('giveordle-text');
     if(todaysGiveordle) {
-        var giveordle = acquire('giveordle-text');
         clear(giveordle);
         ppint(giveordle, todaysGiveordle);
     } else{
-        var giveordle = acquire('giveordle');
         clear(giveordle);
     }
 })();
