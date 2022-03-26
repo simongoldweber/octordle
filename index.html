@@ -549,7 +549,7 @@ table {
             <table width="100%">
                 <tr height="14.2%">
                     <td rowspan=5 style="width:50%;">
-                        <textarea class="box" style="width:100%; border: 1px solid;overflow:auto;resize:none;" rows=25 id="share_content">test</textarea>
+                        <textarea class="box" style="width:100%; border: 1px solid;overflow:auto;resize:none;" rows="7" id="share_content">test</textarea>
                     </td>
                     <td style="font-size:75%; width:50%; text-align:center; vertical-align: top; padding-top: 15px;">
                         <div style="font-size:75%; width:50%; text-align:center; white-space: pre;" id="answer12">&nbsp;</div>
@@ -1647,40 +1647,6 @@ function do_share(copy, shareType) {
     }
 
     text_share += "\noctordle.com";
-    text_share += "\n"
-
-
-    let l1 = line - 1;
-    if (answer_correct[0] >= 0 && answer_correct[1] >= 0 ) {
-        l1 = Math.max(answer_correct[0], answer_correct[1])
-    }
-    let l2 = line - 1;
-    if (answer_correct[2] >= 0 && answer_correct[3] >= 0) {
-        l2 = Math.max(answer_correct[2], answer_correct[3])
-    }
-    let l3 = line - 1;
-    if (answer_correct[4] >= 0 && answer_correct[5] >= 0) {
-        l3 = Math.max(answer_correct[4], answer_correct[5])
-    }
-    let l4 = line - 1;
-    if (answer_correct[6] >= 0 && answer_correct[7] >= 0) {
-        l4 = Math.max(answer_correct[6], answer_correct[7])
-    }
-    for (let i = 0; i <= l1; i++) {
-        text_share += share[0][i] + " " + share[1][i] + "\n";
-    }
-    text_share += "\n"
-    for (let i = 0; i <= l2; i++) {
-        text_share += share[2][i] + " " + share[3][i] + "\n";
-    }
-    text_share += "\n"
-    for (let i = 0; i <= l3; i++) {
-        text_share += share[4][i] + " " + share[5][i] + "\n";
-    }
-    text_share += "\n"
-    for (let i = 0; i <= l4; i++) {
-        text_share += share[6][i] + " " + share[7][i] + "\n";
-    }
 
     if (copy && window.gtag) {
         gtag("event", "share", {
