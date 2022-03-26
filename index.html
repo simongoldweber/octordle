@@ -1260,7 +1260,7 @@ function time_to_next() {
 }
 
 function addDays(date, days) {
-    var d = new Date(date)
+    let d = new Date(date)
     d.setDate(date.getDate() + days);
     return d;
 }
@@ -1276,15 +1276,63 @@ function setTimeToNext() {
 setInterval(setTimeToNext, 1000);
 setTimeToNext();
 
+
+//https://stackoverflow.com/a/15289883/453449
+function dateDiffInDays(a, b) {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
 function restart() {
     acquire("body").style.backgroundColor = "rgb(24, 26, 27)";
 
     show_post_game(false);
 
     if (daily_mode) {
-        var date = (new Date());
-        var startDate = (new Date('01/24/2022'));
-        seed = Math.floor((date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        /*
+            This code has had problems related to DST. This latest change seems to fix it, but in case it breaks
+            again, you can use this to test in jsfiddle.
+
+            function dateDiffInDays(a, b) {
+                // Discard the time and time-zone information.
+                const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+                const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+                const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+            }
+
+
+            function test(date, expectedSeed) {
+              var date = (new Date(date));
+              var startDate = (new Date('01/24/2022'));
+
+              seed = dateDiffInDays(startDate, date);
+
+              if(expectedSeed != seed) {
+                console.log(`${expectedSeed == seed}   - ${seed}    - #{date}`)
+                console.log(seed);
+                console.log((date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+                console.log(" ")
+              }
+            }
+
+            test("Fri Feb 01 2022 22:59:38 GMT-0600 (Central Daylight Time)", 8)
+            test("Fri Feb 01 2022 23:59:38 GMT-0600 (Central Daylight Time)", 8)
+            test("Fri Feb 02 2022 00:15:38 GMT-0600 (Central Daylight Time)", 9)
+            test("Fri Feb 02 2022 01:15:38 GMT-0600 (Central Daylight Time)", 9)
+
+            test("Fri Mar 24 2022 22:59:38 GMT-0500 (Central Daylight Time)", 59)
+            test("Fri Mar 24 2022 23:42:38 GMT-0500 (Central Daylight Time)", 59)
+            test("Fri Mar 25 2022 00:42:38 GMT-0500 (Central Daylight Time)", 60)
+            test("Fri Mar 25 2022 01:42:38 GMT-0500 (Central Daylight Time)", 60)
+            test("Fri Mar 25 2022 23:42:38 GMT-0500 (Central Daylight Time)", 60)
+         */
+        seed = dateDiffInDays(new Date('01/24/2022'), new Date());
 
         printclear(acquire("game_title"), "daily octordle #" + seed.toString(10).padStart(4, "0"));
         window.last_daily = seed;
@@ -1803,8 +1851,7 @@ onStateChange();
         "Smile at someone"
     ];
 
-    let diff = new Date() - new Date('02/23/2022');
-    let days = Math.floor(diff / (1000 * 60 *60 *24));
+    let days = dateDiffInDays(new Date('02/23/2022'), new Date());
 
     let todaysGiveordle = giveordles[days % giveordles.length];
 
