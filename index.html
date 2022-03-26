@@ -1562,9 +1562,6 @@ acquire("share").onclick = function() {
 acquire("share_clipboard").onclick = function() {
     do_share(true, "clipboard");
 }
-// acquire("share_image").onclick = function() {
-//     do_share(true, "image");
-// }
 acquire("reset_free").onclick = function() {
     vibrate();
     if (isInWebViewiOS || confirm("Are you sure you want to start a new Free Octordle? (The current game will be deleted)")) {
@@ -1618,7 +1615,6 @@ function do_share(copy, shareType) {
     let answer = window.answer;
     let share = window.share;
     let text_share = "";
-    let text_mobile_share = "";
     let seed = window.seed;
     let line = window.line;
 
@@ -1651,7 +1647,6 @@ function do_share(copy, shareType) {
     }
 
     text_share += "\noctordle.com";
-    text_mobile_share = text_share
     text_share += "\n"
 
 
@@ -1695,7 +1690,7 @@ function do_share(copy, shareType) {
         });
     }
 
-    printclear(acquire("share_content"), shareType === "image" ? text_mobile_share : text_share);
+    printclear(acquire("share_content"), text_share);
 
     if (copy) {
         acquire("share_content").select();
@@ -1712,194 +1707,6 @@ function do_share(copy, shareType) {
         if (shareType === "share") {
             navigator.share({
                 text: text_share,
-            });
-        } else if (shareType === "image") {
-            var size = 64;
-            var padding = size / 16;
-            var radius = size / 8;
-            var fontScale = 0.75;
-            var textPadding = size / 4;
-            const canvas = document.querySelector("#canvas");
-            canvas.width = (size + padding) * 11 - padding
-            canvas.height = (size + padding) * (l1 + 1 + l2 + 1 + l3 + 1 + l4 + 1 + 4) - padding;
-            const ctx = canvas.getContext("2d");
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // draw words 1 + 2
-            var x = 0;
-            var y = 0;
-            for (var i = 0; i <= l1; i++) {
-                var emojiStr = share[0][i];
-                x = 0;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-
-                emojiStr = share[1][i];
-                x = 6;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-                y++;
-            }
-
-            // draw middle text
-            ctx.font = size * fontScale + 'px Arial';
-            ctx.textAlign = "center";
-            ctx.textBaseline = "alphabetic";
-            ctx.fillStyle = "#ffffff";
-
-            var titleText = daily_mode ? "Daily Octordle #" + seed.toString(10) : "Octordle";
-            var metrics = ctx.measureText(titleText);
-            var fontHeight = metrics.actualBoundingBoxAscent;
-            ctx.fillText(titleText, canvas.width / 2, y * (size + padding) + size - (size - fontHeight) / 2, canvas.width - textPadding * 2);
-            y++;
-            for (var row = 0; row < 4; row++) {
-                for (var i = 0; i < 2; i++) {
-                    ctx.fillStyle = answer_correct[i + row * 2] >= 0 ? "#00a6ed" : "#f8312f";
-                    var dir = (i * 2 - 1)
-                    var xTopCenter = canvas.width / 2 + dir * (padding / 2) + dir * (size / 2)
-                    roundRect(ctx, xTopCenter - size / 2, y * (size + padding), size, size, radius);
-                    if (answer_correct[i + row * 2] >= 0) {
-                        ctx.textAlign = "center";
-                        ctx.fillStyle = "#ffffff";
-                        var numText = answer_correct[i + row * 2] + 1
-                        metrics = ctx.measureText(numText);
-                        fontHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-                        ctx.fillText(
-                            numText,
-                            xTopCenter,
-                            y * (size + padding) + size - (size - fontHeight) / 2,
-                            size
-                        );
-                    }
-                }
-                if (free_mode && shouldShowWords) {
-                    ctx.textAlign = "right";
-                    ctx.fillStyle = "#ffffff";
-                    var wordText = answer[0 + row * 2].toUpperCase()
-                    metrics = ctx.measureText(wordText);
-                    fontHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-                    ctx.fillText(
-                        wordText,
-                        canvas.width / 2 - padding / 2 - size - textPadding,
-                        y * (size + padding) + size - (size - fontHeight) / 2,
-                        canvas.width / 2 - padding - size - textPadding * 2
-                    )
-                    ctx.textAlign = "left";
-                    wordText = answer[1 + row * 2].toUpperCase()
-                    metrics = ctx.measureText(wordText);
-                    fontHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-                    ctx.fillText(
-                        wordText,
-                        canvas.width / 2 + padding / 2 + size + textPadding,
-                        y * (size + padding) + size - (size - fontHeight) / 2,
-                        canvas.width / 2 - padding - size - textPadding * 2
-                    )
-                }
-                y++;
-            }
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = "#ffffff";
-            ctx.fillText("octordle", canvas.width / 2, y * (size + padding) + (size / 2), canvas.width);
-            y++;
-
-            // draw words 3 + 4
-            for (var i = 0; i <= l2; i++) {
-                var emojiStr = share[2][i];
-                x = 0;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-
-                emojiStr = share[3][i];
-                x = 6;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-                y++;
-            }
-
-            // draw words 5 + 6
-            for (var i = 0; i <= l3; i++) {
-                var emojiStr = share[4][i];
-                x = 0;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-
-                emojiStr = share[5][i];
-                x = 6;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-                y++;
-            }
-
-            // draw words 7 + 8
-            for (var i = 0; i <= l3; i++) {
-                var emojiStr = share[6][i];
-                x = 0;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-
-                emojiStr = share[7][i];
-                x = 6;
-                while (emojiStr) {
-                    var pair = get_next_color_from_emojis(emojiStr)
-                    var color = pair[0]
-                    emojiStr = pair[1]
-                    ctx.fillStyle = color;
-                    roundRect(ctx, x * (size + padding), y * (size + padding), size, size, radius);
-                    x++;
-                }
-                y++;
-            }
-
-            canvas.toBlob(function(blob) {
-                var file = new File([blob], "octordle.png", { type: "image/png" });
-                navigator.share({
-                    files: [file],
-                    text: text_mobile_share
-                });
             });
         }
     }
